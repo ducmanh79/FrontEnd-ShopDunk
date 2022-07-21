@@ -21,7 +21,8 @@ export default {
     return{
       thumbURL: config.thumbURL,
       productImages: null,
-      image: null
+      image: null,
+      thumbnail: config.thumbURL + '/' + this.product.thumbnail
     }
   },
   filters:{
@@ -31,15 +32,15 @@ export default {
   },
   methods:{
     changeImage(){
-      this.image = this.productImages[1]
+      this.image = 'http://localhost:8000/storage/product_images/' + this.product.images[1].image_path
     },
     changeImage2(){
-      this.image = this.product.src
+      this.image = this.thumbnail
     }
   },
   mounted(){
     this.productImages = this.product.images
-    this.image = this.product.src
+    this.image = this.thumbnail
   }
 }
 </script>

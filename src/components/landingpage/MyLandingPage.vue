@@ -48,68 +48,13 @@
 import MySlider from "./MySlider.vue";
 import MyPoster from "./MyPoster.vue";
 import MyProductGrid from "./MyProductGrid.vue";
+import BaseRequest from '../../store/BaseRequest'
+// import config from '../../config'
 export default {
   name: "App",
   data() {
     return {
-      products: [
-        {
-          color: "green",
-          title: "iPhone 13 Pro Max",
-          bgtext: "Apple",
-          price: "26990000",
-          category: 'iPhone',
-          src: require("../../assets/product_thumb/iPhone13ProMaxthumb.png"),
-          images: [
-            require("../../assets/product_images/iPhone 13 Pro Max-image-165737423656.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236162.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236307.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236396.png"),
-          ],
-        },
-        {
-          color: "blue",
-          title: "iPhone 13",
-          bgtext: "Apple",
-          price: "18990000",
-          src: require("../../assets/product_thumb/iPhone13thumb.jpg"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 13-image-1657374272172.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272176.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272201.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272932.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 12",
-          bgtext: "Apple",
-          price: "15790000",
-          src: require("../../assets/product_thumb/iPhone12thumb.png"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 12-image-1657374293277.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293285.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293395.png"),
-            require("../../assets/product_images/iPhone 12-image-1657374293873.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 11",
-          bgtext: "Apple",
-          price: "10590000",
-          src: require("../../assets/product_thumb/iPhone11thumb.png"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 11-image-1657374313307.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313391.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313859.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313962.png"),
-          ],
-        },
-      ],
+      products: [],
       poster: [
         require("../../assets/poster/AirPods-MB.jpg"),
         require("../../assets/poster/Care-MB.jpg"),
@@ -124,9 +69,15 @@ export default {
   },
   methods: {
     toProduct(index) {
-      this.$router.push({ name: "ProductDetail", params: { id: index } });
+      this.$router.push({ name: "ProductDetail", params: { id: index+1 } });
     },
+    getProducts(){
+      BaseRequest.get('/products').then(response => {this.products = response.data.products})
+    }
   },
+  mounted(){
+    this.getProducts()
+  }
 };
 </script>
 

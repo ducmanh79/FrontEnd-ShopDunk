@@ -2,7 +2,10 @@
   <div id="main">
     <div class="cat-nav">
       <div class="container category-nav text-start" v-if="data">
-        <p >Home \ Products \ <span style="color: #0066CC">{{data.category}}</span></p>
+        <p>
+          Home \ Products \
+          <span style="color: #0066cc">{{ data.category }}</span>
+        </p>
       </div>
     </div>
     <div class="container container-main">
@@ -14,7 +17,7 @@
               v-for="(image, index) in data.images"
               :key="index"
             >
-              <img :src="image" alt="" class="slide-img" />
+              <img :src="baseURL + image.image_path" alt="" class="slide-img" />
             </div>
           </agile>
 
@@ -31,7 +34,7 @@
               @click="changeSlide(index)"
               class="slide-nav"
             >
-              <img :src="image" alt="" class="slide-img" />
+              <img :src="baseURL + image.image_path" alt="" class="slide-img" />
             </div>
           </agile>
           <div class="agile-controller">
@@ -42,11 +45,13 @@
         <div class="col-12 col-sm-6 info">
           <div class="container text-start product-information" v-if="data">
             <div class="row">
-              <h3>{{ data.title }}</h3>
+              <h3>{{ data.product.title }}</h3>
             </div>
             <hr />
             <div class="row">
-              <h3 style="font-weight: bold">{{ data.price | priceFormat }}</h3>
+              <h3 style="font-weight: bold">
+                {{ data.product.price | priceFormat }}
+              </h3>
               <div id="color-selector">
                 <p v-if="selected">
                   Selected color: {{ productToBeAdd.color }}
@@ -132,6 +137,8 @@
 <script>
 import { VueAgile } from "vue-agile";
 import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import BaseRequest from "../../store/BaseRequest";
+import config from "../../config";
 export default {
   components: {
     agile: VueAgile,
@@ -139,64 +146,7 @@ export default {
   data() {
     return {
       data: null,
-      products: [
-        {
-          color: "green",
-          title: "iPhone 13 Pro Max",
-          bgtext: "Apple",
-          price: "26990000",
-          category: 'iPhone',
-          src: require("../../assets/product_thumb/iPhone13ProMaxthumb.png"),
-          images: [
-            require("../../assets/product_images/iPhone 13 Pro Max-image-165737423656.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236162.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236307.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236396.png"),
-          ],
-        },
-        {
-          color: "blue",
-          title: "iPhone 13",
-          bgtext: "Apple",
-          price: "18990000",
-          src: require("../../assets/product_thumb/iPhone13thumb.jpg"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 13-image-1657374272172.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272176.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272201.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272932.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 12",
-          bgtext: "Apple",
-          price: "15790000",
-          src: require("../../assets/product_thumb/iPhone12thumb.png"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 12-image-1657374293277.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293285.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293395.png"),
-            require("../../assets/product_images/iPhone 12-image-1657374293873.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 11",
-          bgtext: "Apple",
-          price: "10590000",
-          src: require("../../assets/product_thumb/iPhone11thumb.png"),
-          category: 'iPhone',
-          images: [
-            require("../../assets/product_images/iPhone 11-image-1657374313307.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313391.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313859.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313962.png"),
-          ],
-        },
-      ],
+      baseURL: config.baseURL,
       productToBeAdd: {
         title: null,
         price: null,
@@ -239,9 +189,9 @@ export default {
           },
           {
             breakpoint: 605,
-            settings:{
-              slidesToShow: 2
-            }
+            settings: {
+              slidesToShow: 2,
+            },
           },
           {
             breakpoint: 900,
@@ -285,14 +235,20 @@ export default {
       this.createProduct(this.productToBeAdd);
       this.$router.push({ name: "Cart" });
     },
+    getProduct() {
+      BaseRequest.get("/products/" + this.$route.params.id).then((response) => {
+        this.data = response.data;
+        this.productToBeAdd.thumbnail = response.data.product.thumbnail;
+        this.productToBeAdd.title = response.data.product.title;
+        this.productToBeAdd.price = response.data.product.price;
+      });
+    },
     ...mapActions(["createProduct"]),
     ...mapMutations(["setNewProduct"]),
   },
   mounted() {
-    this.data = this.products[this.$route.params.id];
-    this.productToBeAdd.thumbnail = this.products[this.$route.params.id].src;
-    this.productToBeAdd.title = this.products[this.$route.params.id].title;
-    this.productToBeAdd.price = this.products[this.$route.params.id].price;
+    this.getProduct();
+
   },
   computed: {
     ...mapGetters(["orders"]),
@@ -341,11 +297,11 @@ export default {
   align-items: center;
   height: 50px;
 }
-.category-nav p{
+.category-nav p {
   margin: 0;
 }
-.cat-nav{
-  background-color: #fff;  
+.cat-nav {
+  background-color: #fff;
 }
 
 @media only screen and (max-width: 768px) {

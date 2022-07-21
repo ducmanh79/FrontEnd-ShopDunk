@@ -29,17 +29,17 @@
       <div class="social-list mt-2 text-center" style="color: white">
         <div class="row">
           <div class="col">
-            <a href="facebook.com">
+            <a href="http://facebook.com">
               <b-icon icon="facebook" font-scale="2"></b-icon>
             </a>
           </div>
           <div class="col">
-            <a href="youtube.com">
+            <a href="http://youtube.com">
               <b-icon icon="youtube" font-scale="2" style="color: red"></b-icon>
             </a>
           </div>
           <div class="col">
-            <a href="instagram.com">
+            <a href="http://instagram.com">
               <b-icon
                 icon="instagram"
                 font-scale="2"

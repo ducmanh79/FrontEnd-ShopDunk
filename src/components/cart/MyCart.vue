@@ -6,7 +6,7 @@
       <div class="product" v-for="(product, index) in orders" :key="index">
         <div class="row" v-if="product.title != null">
           <div class="col product-img">
-            <img style="width: 100%" :src="product.thumbnail" alt="" />
+            <img style="width: 100%" :src="thumbURL + product.thumbnail" alt="" />
           </div>
           <div class="col product-info">
             <p>{{ product.title }} x {{ product.quantity }}</p>
@@ -91,6 +91,7 @@
 </template>
 
 <script>
+import config from '../../config'
 import { mapGetters, mapMutations } from "vuex";
 export default {
   props: ["product"],
@@ -103,6 +104,7 @@ export default {
       cusPhoneNumber: "",
       cusEmail: "",
       ordersReceive: null,
+      thumbURL: config.thumbURL,
       nameRules: [
         (v) => !!v || "Name is required",
         (v) => (v && /^[a-zA-Z0-9_ ]*$/.test(v)) || "Name must only be letters",

@@ -22,7 +22,7 @@
             >
               <div class="col">
                 <img
-                  src="https://cdn-dgcei.nitrocdn.com/QaFavQVnaqgHtiSsAelwGDKVguOuACXM/assets/static/optimized/rev-8e3a1d8/wp-content/uploads/elementor/thumbs/Image-Standard-poarz4misqzg6twg7xszvw3tdbaevlod3cps91fz72.png"
+                  :src="smthumb1"
                   style="height: 120px"
                   alt=""
                 />
@@ -40,7 +40,7 @@
             >
               <div class="col">
                 <img
-                  src="https://cdn-dgcei.nitrocdn.com/QaFavQVnaqgHtiSsAelwGDKVguOuACXM/assets/static/optimized/rev-8e3a1d8/wp-content/uploads/elementor/thumbs/Image-Standard-poarz4misqzg6twg7xszvw3tdbaevlod3cps91fz72.png"
+                  :src="smthumb2"
                   style="height: 120px"
                   alt=""
                 />
@@ -157,6 +157,9 @@
 <script>
 import MySlider from "../landingpage/MySlider.vue";
 import MyProductGrid from "../landingpage/MyProductGrid.vue";
+import BaseRequest from '../../store/BaseRequest'
+import smthumb1 from '../../assets/smallthumb.png'
+import smthumb2 from '../../assets/smallthumb2.png'
 export default {
   components: {
     MySlider,
@@ -165,66 +168,21 @@ export default {
   data() {
     return {
       fullScript: false,
-      products: [
-        {
-          color: "green",
-          title: "iPhone 13 Pro Max",
-          bgtext: "Apple",
-          price: "26990000",
-          src: require("../../assets/product_thumb/iPhone13ProMaxthumb.png"),
-          images: [
-            require("../../assets/product_images/iPhone 13 Pro Max-image-165737423656.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236162.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236307.png"),
-            require("../../assets/product_images/iPhone 13 Pro Max-image-1657374236396.png"),
-          ],
-        },
-        {
-          color: "blue",
-          title: "iPhone 13",
-          bgtext: "Apple",
-          price: "18990000",
-          src: require("../../assets/product_thumb/iPhone13thumb.jpg"),
-          images: [
-            require("../../assets/product_images/iPhone 13-image-1657374272172.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272176.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272201.jpg"),
-            require("../../assets/product_images/iPhone 13-image-1657374272932.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 12",
-          bgtext: "Apple",
-          price: "15790000",
-          src: require("../../assets/product_thumb/iPhone12thumb.png"),
-          images: [
-            require("../../assets/product_images/iPhone 12-image-1657374293277.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293285.jpg"),
-            require("../../assets/product_images/iPhone 12-image-1657374293395.png"),
-            require("../../assets/product_images/iPhone 12-image-1657374293873.jpg"),
-          ],
-        },
-        {
-          color: "green",
-          title: "iPhone 11",
-          bgtext: "Apple",
-          price: "10590000",
-          src: require("../../assets/product_thumb/iPhone11thumb.png"),
-          images: [
-            require("../../assets/product_images/iPhone 11-image-1657374313307.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313391.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313859.jpg"),
-            require("../../assets/product_images/iPhone 11-image-1657374313962.png"),
-          ],
-        },
-      ],
+      products: [],
+      smthumb1: smthumb1,
+      smthumb2: smthumb2
     }
   },
   methods:{
     toProduct(index){
-      this.$router.push({name: 'ProductDetail', params: {id: index}})
+      this.$router.push({name: 'ProductDetail', params: {id: index+1}})
+    },
+    getProductList(){
+      BaseRequest.get('/products').then(response => {this.products = response.data.products})
     }
+  },
+  mounted(){
+    this.getProductList()
   }
 };
 </script>
